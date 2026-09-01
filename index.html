@@ -178,9 +178,9 @@ function appMain(){
 'input{font:inherit; color:inherit;}',
 '.tnum{font-variant-numeric:tabular-nums;}',
 
-'#view{max-width:480px; margin:0 auto; padding:0 16px 40px;}',
+'#view{max-width:480px; margin:0 auto; padding:0 16px calc(96px + env(safe-area-inset-bottom));}',
 
-'.navbar{position:sticky; top:0; z-index:15; padding:14px 0 10px; margin:0 -16px; padding-left:16px; padding-right:16px; background:color-mix(in srgb, var(--bg) 78%, transparent); backdrop-filter:blur(28px) saturate(180%); -webkit-backdrop-filter:blur(28px) saturate(180%); display:flex; justify-content:space-between; align-items:flex-start; border-bottom:0.5px solid var(--separator);}',
+'.navbar{position:sticky; top:0; z-index:15; padding:calc(14px + env(safe-area-inset-top)) 16px 10px; margin:0 -16px; background:color-mix(in srgb, var(--bg) 78%, transparent); backdrop-filter:blur(28px) saturate(180%); -webkit-backdrop-filter:blur(28px) saturate(180%); display:flex; justify-content:space-between; align-items:flex-start; border-bottom:0.5px solid var(--separator);}',
 '.nav-eyebrow{font-size:0.72rem; font-weight:600; letter-spacing:0.04em; color:var(--label-2); text-transform:uppercase; margin-bottom:2px;}',
 '.large-title{font-size:2.05rem; font-weight:700; letter-spacing:-0.02em; margin:0; transition:opacity .2s ease;}',
 '.sync-caption{font-size:0.78rem; color:var(--label-3); margin-top:4px;}',
@@ -252,9 +252,29 @@ function appMain(){
 '.stat-tile-value{font-size:1.28rem; font-weight:700;}',
 '.stat-tile-value.income{color:var(--green);}',
 '.stat-tile-value.expense{color:var(--red);}',
-'.avail-row{display:flex; justify-content:space-between; align-items:center; padding:2px 4px 16px;}',
-'.avail-label{font-size:0.9rem; color:var(--label-2);}',
-'.avail-value{font-size:1rem; font-weight:700;}',
+'.month-strip{display:flex; gap:8px; overflow-x:auto; padding:2px 2px 14px; -webkit-overflow-scrolling:touch; scrollbar-width:none;}',
+'.month-strip::-webkit-scrollbar{display:none;}',
+'.month-chip{flex:none; min-width:60px; padding:8px 6px; border-radius:14px; text-align:center; background:var(--fill-3); border:none; cursor:pointer;}',
+'.month-chip.active{background:var(--accent); color:#fff;}',
+'.month-chip-label{font-size:0.78rem; font-weight:600; text-transform:capitalize;}',
+'.month-chip-value{font-size:0.68rem; opacity:.75; margin-top:2px;}',
+
+'.hero-card{position:relative; overflow:hidden; border-radius:24px; padding:26px 20px 20px; margin-bottom:14px; background:var(--bg-elevated); text-align:center;}',
+'.hero-card::before{content:""; position:absolute; inset:-50%; background:radial-gradient(circle at 25% 15%, var(--accent-tint), transparent 55%), radial-gradient(circle at 85% 85%, var(--tag-pink), transparent 55%), radial-gradient(circle at 80% 10%, var(--tag-yellow), transparent 50%); filter:blur(34px); opacity:.9; z-index:0;}',
+'.hero-card > *{position:relative; z-index:1;}',
+'.hero-label{font-size:0.85rem; color:var(--label-2); margin-bottom:4px;}',
+'.hero-value{font-size:2.4rem; font-weight:700; letter-spacing:-0.02em; margin-bottom:12px;}',
+'.hero-pills{display:flex; justify-content:center; gap:8px; margin-bottom:10px;}',
+'.hero-pill{padding:7px 14px; border-radius:999px; font-size:0.86rem; font-weight:700;}',
+'.hero-pill.pill-green{background:var(--green-tint); color:var(--green);}',
+'.hero-pill.pill-red{background:var(--red-tint); color:var(--red);}',
+'.hero-sub{font-size:0.76rem; color:var(--label-3);}',
+
+'.amount-pill{display:inline-flex; align-items:center; padding:5px 11px; border-radius:999px; font-weight:700; font-size:0.86rem;}',
+'.amount-pill.income{background:var(--green-tint); color:var(--green);}',
+'.amount-pill.expense{background:var(--red-tint); color:var(--red);}',
+
+'.fab-mic{position:fixed; right:20px; bottom:calc(20px + env(safe-area-inset-bottom)); width:58px; height:58px; border-radius:50%; background:var(--red); color:#fff; font-size:1.4rem; border:none; box-shadow:0 8px 22px rgba(255,59,48,0.4); z-index:22; display:flex; align-items:center; justify-content:center;}',
 
 '.kind-pills{display:flex; gap:8px; margin-bottom:10px;}',
 '.kind-pill{font-size:0.76rem; font-weight:600; padding:5px 10px; border-radius:8px; background:var(--fill-3); color:var(--label-2);}',
@@ -264,7 +284,7 @@ function appMain(){
 '.cat-row{display:flex; align-items:center; gap:12px; padding:11px 14px; cursor:pointer; border-bottom:1px solid var(--separator);}',
 '.cat-group:last-child .cat-row{border-bottom:none;}',
 '.cat-group.open .cat-row{border-bottom:1px solid var(--separator);}',
-'.tag-icon{width:32px; height:32px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:16px; flex:none;}',
+'.tag-icon{width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:17px; flex:none;}',
 '.tag-blue{background:var(--tag-blue);} .tag-green{background:var(--tag-green);} .tag-orange{background:var(--tag-orange);}',
 '.tag-purple{background:var(--tag-purple);} .tag-pink{background:var(--tag-pink);} .tag-red{background:var(--tag-red);}',
 '.tag-teal{background:var(--tag-teal);} .tag-yellow{background:var(--tag-yellow);}',
@@ -404,13 +424,14 @@ function appMain(){
   }
 
   var activeTab = 'resumen';
+  var resumenMonth = monthKey();
   var reportMonth = monthKey();
   var selectedReportDay = null;
 
   // ---------- Cálculos ----------
-  function calc(){
+  function calc(mk){
+    mk = mk || monthKey();
     var now = new Date();
-    var mk = monthKey();
 
     var monthIncome = STATE.income.filter(function(e){ return e.date && e.date.slice(0,7) === mk; });
     var incomeThisMonth = monthIncome.reduce(function(s,e){ return s + Number(e.amount||0); }, 0);
@@ -420,7 +441,11 @@ function appMain(){
 
     var monthExpenses = STATE.expenses.filter(function(e){ return e.date && e.date.slice(0,7) === mk; });
     var spentThisMonth = monthExpenses.reduce(function(s,e){ return s + Number(e.amount||0); }, 0);
-    var available = incomeThisMonth - spentThisMonth;
+
+    var monthSavings = STATE.savings.filter(function(s){ return s.date && s.date.slice(0,7) === mk; });
+    var savedThisMonth = monthSavings.reduce(function(s,x){ return s + Number(x.amount||0); }, 0);
+
+    var available = incomeThisMonth - spentThisMonth - savedThisMonth;
 
     var savedTotal = STATE.savings.reduce(function(s,x){ return s + Number(x.amount||0); }, 0);
     var target = Number(STATE.goal.target||0);
@@ -430,13 +455,16 @@ function appMain(){
     var monthsLeft = Math.max(daysLeft/30.44, daysLeft>0 ? 0.1 : 0.0001);
     var remaining = Math.max(target - savedTotal, 0);
     var neededPerMonth = daysLeft > 0 ? remaining/monthsLeft : remaining;
-    var maxSpend = incomeThisMonth - neededPerMonth;
-    var onTrack = neededPerMonth <= incomeThisMonth + 0.005;
+    var realIncomeThisMonth = STATE.income.filter(function(e){ return e.date && e.date.slice(0,7) === monthKey(); })
+      .reduce(function(s,e){ return s + Number(e.amount||0); }, 0);
+    var maxSpend = realIncomeThisMonth - neededPerMonth;
+    var onTrack = neededPerMonth <= realIncomeThisMonth + 0.005;
     var pct = target > 0 ? Math.min(100, (savedTotal/target)*100) : 0;
 
     return {
-      incomeThisMonth:incomeThisMonth, fijoThisMonth:fijoThisMonth, extraThisMonth:extraThisMonth,
-      spentThisMonth:spentThisMonth, available:available, savedTotal:savedTotal, target:target,
+      mk:mk, incomeThisMonth:incomeThisMonth, fijoThisMonth:fijoThisMonth, extraThisMonth:extraThisMonth,
+      spentThisMonth:spentThisMonth, savedThisMonth:savedThisMonth, available:available,
+      savedTotal:savedTotal, target:target, realIncomeThisMonth:realIncomeThisMonth,
       daysLeft:daysLeft, monthsLeft:monthsLeft, remaining:remaining, neededPerMonth:neededPerMonth,
       maxSpend:maxSpend, onTrack:onTrack, pct:pct,
       incomeCatList: groupBy(monthIncome, STATE.incomeCategories),
@@ -464,6 +492,9 @@ function appMain(){
       '<button type="button" class="seg-btn' + (activeTab==='reportes'?' active':'') + '" data-tab="reportes">Reportes</button>' +
     '</div>';
     html += '<div class="tab-content" id="tab-content">' + (activeTab === 'resumen' ? renderResumenContent() : renderReportesContent()) + '</div>';
+    if (activeTab === 'resumen') {
+      html += '<button type="button" class="fab-mic" id="fab-mic" aria-label="Registrar gasto por voz">🎙️</button>';
+    }
     view.innerHTML = html;
     wireViewEvents();
     if (activeTab === 'resumen') animateRing();
@@ -480,8 +511,24 @@ function appMain(){
     '</div>';
   }
 
+  function renderMonthStrip(){
+    var real = monthKey();
+    var months = [];
+    for (var i=-3; i<=2; i++) months.push(shiftMonth(real, i));
+    return '<div class="month-strip">' + months.map(function(mk){
+      var mc = calc(mk);
+      var parts = mk.split('-');
+      var abbr = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][parseInt(parts[1],10)-1];
+      return '<button type="button" class="month-chip' + (mk===resumenMonth?' active':'') + '" data-month="' + mk + '">' +
+        '<div class="month-chip-label">' + capitalize(abbr) + '</div>' +
+        '<div class="month-chip-value tnum">' + fmt(mc.available).replace('S/ ','') + '</div>' +
+      '</button>';
+    }).join('') + '</div>';
+  }
+
   function renderResumenContent(){
-    var c = calc();
+    var c = calc(resumenMonth);
+    var mLabel = monthKeyLabel(resumenMonth);
     var html = '';
 
     // ---- Meta de ahorro (siempre primero) ----
@@ -495,12 +542,12 @@ function appMain(){
     var advice;
     if (c.daysLeft <= 0) {
       advice = '<div class="goal-advice ' + (c.savedTotal>=c.target?'':'warn') + '">' + (c.savedTotal>=c.target ? '🎉 <b>¡Meta cumplida!</b>' : '<b>Se venció el plazo.</b>') + ' Ahorraste ' + fmt(c.savedTotal) + ' de ' + fmt(c.target) + '.</div>';
-    } else if (c.incomeThisMonth <= 0) {
+    } else if (c.realIncomeThisMonth <= 0) {
       advice = '<div class="goal-advice neutral">Aún no registras ingresos este mes. Registra tu sueldo o algún pago para ver cuánto puedes gastar y seguir tu meta.</div>';
     } else if (c.onTrack) {
-      advice = '<div class="goal-advice">Necesitas ahorrar <b>' + fmt(c.neededPerMonth) + ' al mes</b> para llegar a tu meta. Con tus ingresos de ' + fmt(c.incomeThisMonth) + ' este mes, puedes gastar hasta <b>' + fmt(c.maxSpend) + '</b> y aun así lograrlo.</div>';
+      advice = '<div class="goal-advice">Necesitas ahorrar <b>' + fmt(c.neededPerMonth) + ' al mes</b> para llegar a tu meta. Con tus ingresos de ' + fmt(c.realIncomeThisMonth) + ' este mes, puedes gastar hasta <b>' + fmt(c.maxSpend) + '</b> y aun así lograrlo.</div>';
     } else {
-      var falta = c.neededPerMonth - c.incomeThisMonth;
+      var falta = c.neededPerMonth - c.realIncomeThisMonth;
       advice = '<div class="goal-advice warn">Con tus ingresos de este mes no alcanza: necesitas ahorrar <b>' + fmt(c.neededPerMonth) + ' al mes</b>. Te faltarían <b>' + fmt(falta) + ' extra</b> para llegar a tu meta a tiempo.</div>';
     }
 
@@ -511,15 +558,22 @@ function appMain(){
       advice +
     '</div>';
 
-    // ---- Resumen del mes ----
-    html += '<div class="stat-row">' +
-      '<div class="stat-tile"><div class="stat-tile-label">Ingresos</div><div class="stat-tile-value income tnum">' + fmt(c.incomeThisMonth) + '</div></div>' +
-      '<div class="stat-tile"><div class="stat-tile-label">Gastos</div><div class="stat-tile-value expense tnum">' + fmt(c.spentThisMonth) + '</div></div>' +
+    // ---- Selector de meses ----
+    html += renderMonthStrip();
+
+    // ---- Tarjeta hero: disponible del mes ----
+    html += '<div class="hero-card">' +
+      '<div class="hero-label">Disponible en ' + mLabel + '</div>' +
+      '<div class="hero-value tnum">' + fmt(c.available) + '</div>' +
+      '<div class="hero-pills">' +
+        '<span class="hero-pill pill-green">+ ' + fmt(c.incomeThisMonth) + '</span>' +
+        '<span class="hero-pill pill-red">− ' + fmt(c.spentThisMonth + c.savedThisMonth) + '</span>' +
+      '</div>' +
+      '<div class="hero-sub">Gastos ' + fmt(c.spentThisMonth) + ' · Ahorro ' + fmt(c.savedThisMonth) + '</div>' +
     '</div>';
-    html += '<div class="avail-row"><span class="avail-label">Disponible en ' + monthLabel() + '</span><span class="avail-value tnum">' + fmt(c.available) + '</span></div>';
 
     // ---- Ingresos ----
-    html += '<div class="section-title">Ingresos de ' + monthLabel() + '</div>';
+    html += '<div class="section-title">Ingresos de ' + mLabel + '</div>';
     if (c.incomeCatList.length) {
       html += '<div class="kind-pills"><span class="kind-pill">Fijo <b class="tnum">' + fmt(c.fijoThisMonth) + '</b></span><span class="kind-pill">Extra <b class="tnum">' + fmt(c.extraThisMonth) + '</b></span></div>';
       html += '<div class="list-card">' + c.incomeCatList.map(function(g){ return renderCatGroup(g, 'income'); }).join('') + '</div>';
@@ -528,7 +582,7 @@ function appMain(){
     }
 
     // ---- Gastos ----
-    html += '<div class="section-title">Gastos de ' + monthLabel() + '</div>';
+    html += '<div class="section-title">Gastos de ' + mLabel + '</div>';
     if (c.expenseCatList.length) {
       html += '<div class="list-card">' + c.expenseCatList.map(function(g){ return renderCatGroup(g, 'expense'); }).join('') + '</div>';
     } else {
@@ -634,7 +688,7 @@ function appMain(){
     return '<div class="cat-group">' +
       '<div class="cat-row"><span class="tag-icon tag-' + g.cat.color + '">' + g.cat.emoji + '</span>' +
       '<div class="cat-info"><div class="cat-label">' + escapeHtml(g.cat.label) + '</div>' + showKind + '</div>' +
-      '<span class="cat-total ' + kind + ' tnum">' + fmt(g.total) + '</span>' +
+      '<span class="amount-pill ' + kind + ' tnum">' + (kind==='income'?'+ ':'− ') + fmt(g.total) + '</span>' +
       '<span class="cat-chevron">▸</span></div>' +
       '<div class="cat-items">' + g.items.map(function(e){
         return '<div class="item-row"><div class="item-main"><div class="item-desc">' + (e.description ? escapeHtml(e.description) : (e.note ? escapeHtml(e.note) : '(sin nota)')) + '</div><div class="item-date">' + formatDate(e.date) + (e.source==='voz' ? ' · por voz' : '') + '</div></div>' +
@@ -647,6 +701,14 @@ function appMain(){
   function wireViewEvents(){
     document.getElementById('open-settings-btn').addEventListener('click', openSettings);
     document.getElementById('open-add-btn').addEventListener('click', function(){ openSheet('actions'); });
+    var fabMic = document.getElementById('fab-mic');
+    if (fabMic) fabMic.addEventListener('click', function(){
+      openFlow('expense');
+      setTimeout(function(){
+        var micBtn = document.getElementById('mic-btn');
+        if (micBtn && !micBtn.disabled) micBtn.click();
+      }, 380);
+    });
     document.querySelectorAll('.seg-btn').forEach(function(btn){
       btn.addEventListener('click', function(){
         var tab = btn.getAttribute('data-tab');
@@ -657,6 +719,12 @@ function appMain(){
     });
 
     if (activeTab === 'resumen') {
+      document.querySelectorAll('.month-chip').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          resumenMonth = btn.getAttribute('data-month');
+          render();
+        });
+      });
       document.querySelectorAll('.cat-row').forEach(function(row){
         row.addEventListener('click', function(){ row.parentElement.classList.toggle('open'); });
       });
